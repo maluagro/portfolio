@@ -7,6 +7,8 @@ import jardinsDoMel from './assets/jardins-do-mel.jpg'
 import ninhoAbelhaNativa from './assets/ninho-abelha-nativa.jpg'
 
 const WHATSAPP = 'https://wa.me/5515996154429'
+// Prefixo dos arquivos da pasta public (ex.: /portfolio/ no GitHub Pages)
+const BASE = import.meta.env.BASE_URL
 
 const navItems = [
   ['Sobre', 'sobre'],
@@ -422,10 +424,10 @@ export default function App() {
                 controls
                 playsInline
                 preload="none"
-                poster="/video/oficina-poster.jpg"
+                poster={`${BASE}video/oficina-poster.jpg`}
                 aria-label="Vídeo: Malu Alves em atividade de campo com abelhas nativas sem ferrão"
               >
-                <source src="/video/oficina-abelhas-nativas.mp4" type="video/mp4" />
+                <source src={`${BASE}video/oficina-abelhas-nativas.mp4`} type="video/mp4" />
               </video>
             </div>
             <div>
@@ -514,7 +516,7 @@ export default function App() {
         <div className="container footer-inner">
           <div className="footer-brand"><strong>Malu Alves</strong><span>Engenheira Agrônoma</span></div>
           <p>© {new Date().getFullYear()} Malu Alves. Todos os direitos reservados.</p>
-          <a href="/curriculo.pdf" download className="resume-link">Baixar currículo em PDF <Icon name="arrow" size={18} /></a>
+          <a href={`${BASE}curriculo.pdf`} download className="resume-link">Baixar currículo em PDF <Icon name="arrow" size={18} /></a>
         </div>
       </footer>
 
