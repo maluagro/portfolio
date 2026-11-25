@@ -1,6 +1,6 @@
-# Publica o site no GitHub Pages a cada push na branch main.
-# Requisito: em Settings > Pages, defina "Source" como "GitHub Actions".
-name: Deploy no GitHub Pages
+# Faz o build a cada push na main e publica o resultado na branch gh-pages.
+# No GitHub: Settings > Pages > Source = "Deploy from a branch" > gh-pages / (root).
+name: Deploy na branch gh-pages
 
 on:
   push:
@@ -8,16 +8,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write # necessário para a Action gravar na branch gh-pages
 
 concurrency:
-  group: pages
+  group: gh-pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,16 +39,11 @@ jobs:
           # o site fica em https://maluagro.github.io/portfolio/
           FIGMA_PUBLIC_URL: /portfolio
 
-      - uses: actions/upload-pages-artifact@v3
+      # Copia a pasta dist para a branch gh-pages (arquivos normais, sem LFS)
+      - uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          force_orphan: true # mantém só a última versão, sem acumular histórico de imagens
+          commit_message: Deploy do site
